@@ -124,11 +124,27 @@ public class Main {
 		newStudent.setSurname("Tr¹balski");
 		newStudent.setPesel("12345678");
 		
+		
+		Teacher teacher1 =new Teacher();
+		teacher1.setName("pawe³");
+		teacher1.setSurname("Wzorek");
+		teacher1.setPesel("98989898989");
+		
+		
+		Teacher teacher2 =new Teacher();
+		teacher2.setName("Ala");
+		teacher2.setSurname("Kot");
+		teacher2.setPesel("98989898989");
+				
 		newClass.addStudent(newStudent);
 		newSchool.addClass(newClass);
+		newClass.addTeacher(teacher1);
+		newClass.addTeacher(teacher2);
 		
 		Transaction transaction = session.beginTransaction();
 		session.save(newSchool);
+		session.save(newClass);
+		session.save(teacher1);
 		transaction.commit();
 	}
 
@@ -137,17 +153,24 @@ public class Main {
 		Criteria crit = session.createCriteria(School.class);
 		List<School> schools = crit.list();
 
-		System.out.println("### Schools and classes");
+		System.out.println("### Schools, classes and teachers");
 		SimpleDateFormat format1 = new SimpleDateFormat("yyyy");
 		for (School s : schools) {
 			System.out.println(s);
 			for (SchoolClass schoolClass : s.getClasses()) {
 				System.out.println("   " + schoolClass);
+				
+				for (Teacher teacher : schoolClass.getTeachers()) {
+					System.out.print("            " + teacher.getName());
+					System.out.print(" " + teacher.getSurname());
+					System.out.println(" (" + teacher.getPesel() + ")");
+				}
 				for (Student student : schoolClass.getStudents()) {
 					System.out.print("            " + student.getName());
 					System.out.print(" " + student.getSurname());
 					System.out.println(" (" + student.getPesel() + ")");
 				}
+				
 			}
 		}
 
